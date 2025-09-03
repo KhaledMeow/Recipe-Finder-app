@@ -3,18 +3,10 @@ import PropTypes from 'prop-types';
 import { FaSearch, FaUtensils, FaYoutube } from 'react-icons/fa';
 import '../styles/MealCard.css';
 
-const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
+const MealCard = ({ meal, onFavoriteToggle, isFavorite = false, onClick }) => {
   const handleImageError = e => {
     e.target.onerror = null;
     e.target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Available';
-  };
-
-  const handleFavoriteClick = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onFavoriteToggle) {
-      onFavoriteToggle(meal);
-    }
   };
 
   const handleViewRecipe = e => {
@@ -33,8 +25,16 @@ const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
     }
   };
 
+  const handleFavoriteClick = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onFavoriteToggle) {
+      onFavoriteToggle(e);
+    }
+  };
+
   return (
-    <div className="meal-card">
+    <div className="meal-card" onClick={onClick} role="button" tabIndex={0}>
       <div className="meal-image-container">
         {meal.source && (
           <button
@@ -81,22 +81,23 @@ const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
         <div className="meal-actions">
           <div className="meal-actions-buttons">
             <a
-              href={`https://www.google.com/search?q=${encodeURIComponent(`${meal.title} recipe`)}`}
+              href={`https://www.google.com/search?q=${encodeURIComponent(`${meal.title} ingredients`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="search-recipe-button"
-              title="Search for recipe"
+              className="search-ingredients-button"
+              title="Search for ingredients"
             >
               <FaSearch className="search-icon" />
-              <span>Find Recipe</span>
+              <span>Find Ingredients</span>
             </a>
             {onFavoriteToggle && (
               <button
                 onClick={handleFavoriteClick}
                 className={`favorite-button ${isFavorite ? 'favorited' : ''}`}
                 aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                onKeyDown={e => e.key === 'Enter' && handleFavoriteClick(e)}
               >
-                {isFavorite ? '❤️' : '♡'}
+                {isFavorite ? '❤️' : '🤍'}
               </button>
             )}
           </div>
@@ -110,6 +111,8 @@ MealCard.propTypes = {
   meal: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     title: PropTypes.string.isRequired,
+    source: PropTypes.string,
+    youtube: PropTypes.string,
     image: PropTypes.string,
     calories: PropTypes.number,
     dietLabels: PropTypes.arrayOf(PropTypes.string),

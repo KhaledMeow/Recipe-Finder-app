@@ -135,6 +135,23 @@ export const getSimilarMeals = async (category, excludeId = null, limit = 4) => 
   }
 };
 
+// Get meal by ID
+export const getMealById = async id => {
+  try {
+    const response = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
+    if (!response.ok) throw new Error('Failed to fetch meal details');
+
+    const data = await response.json();
+    const meal = data.meals?.[0];
+    if (!meal) throw new Error('Meal not found');
+
+    return transformMealData(meal);
+  } catch (error) {
+    console.error('Error in getMealById:', error);
+    throw error;
+  }
+};
+
 // Get random meals (for the home page)
 export const getRandomMeals = async (count = 6) => {
   try {

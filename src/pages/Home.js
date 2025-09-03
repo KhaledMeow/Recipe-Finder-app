@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { searchMeals, getRandomMeals } from '../utils/api';
+import { searchMeals, getRandomMeals, getMealById } from '../utils/api';
 import SearchBar from '../components/SearchBar';
 import MealCard from '../components/MealCard';
 import MealModal from '../components/MealModal';
@@ -70,14 +70,15 @@ const Home = () => {
     }
   };
 
-  const handleMealClick = meal => {
-    setSelectedMeal(meal);
-  };
-
-  const handleKeyDown = (e, meal) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleMealClick(meal);
+  const handleMealClick = async meal => {
+    try {
+      // Fetch full meal details including instructions
+      const fullMeal = await getMealById(meal.id);
+      setSelectedMeal(fullMeal);
+    } catch (error) {
+      console.error('Error fetching meal details:', error);
+      // Fallback to basic meal data if there's an error
+      setSelectedMeal(meal);
     }
   };
 
@@ -137,24 +138,16 @@ const Home = () => {
           ) : (
             <div className="meals-grid">
               {featuredMeals.map(meal => (
-                <div
+                <MealCard
                   key={meal.id}
-                  className="meal-item"
+                  meal={meal}
+                  onFavoriteToggle={e => {
+                    e.stopPropagation();
+                    toggleFavorite(meal);
+                  }}
+                  isFavorite={isFavorite(meal.id)}
                   onClick={() => handleMealClick(meal)}
-                  onKeyDown={e => handleKeyDown(e, meal)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`View details for ${meal.title}`}
-                >
-                  <MealCard
-                    meal={meal}
-                    onFavoriteToggle={e => {
-                      e.stopPropagation();
-                      toggleFavorite(meal);
-                    }}
-                    isFavorite={isFavorite(meal.id)}
-                  />
-                </div>
+                />
               ))}
             </div>
           )}
@@ -165,24 +158,16 @@ const Home = () => {
           <h2>Search Results for "{query}"</h2>
           <div className="meals-grid">
             {meals.map(meal => (
-              <div
+              <MealCard
                 key={meal.id}
-                className="meal-item"
+                meal={meal}
+                onFavoriteToggle={e => {
+                  e.stopPropagation();
+                  toggleFavorite(meal);
+                }}
+                isFavorite={isFavorite(meal.id)}
                 onClick={() => handleMealClick(meal)}
-                onKeyDown={e => handleKeyDown(e, meal)}
-                role="button"
-                tabIndex={0}
-                aria-label={`View details for ${meal.title}`}
-              >
-                <MealCard
-                  meal={meal}
-                  onFavoriteToggle={e => {
-                    e.stopPropagation();
-                    toggleFavorite(meal);
-                  }}
-                  isFavorite={isFavorite(meal.id)}
-                />
-              </div>
+              />
             ))}
           </div>
         </div>

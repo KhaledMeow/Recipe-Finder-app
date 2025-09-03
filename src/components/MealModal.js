@@ -29,7 +29,15 @@ const MealModal = ({ meal, onClose }) => {
             <h3>Instructions</h3>
             <div className="instructions">
               {meal.instructions ? (
-                <div dangerouslySetInnerHTML={{ __html: meal.instructions }} />
+                Array.isArray(meal.instructions) ? (
+                  <ol>
+                    {meal.instructions.map((step, index) => (
+                      <li key={index}>{step}</li>
+                    ))}
+                  </ol>
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: meal.instructions }} />
+                )
               ) : (
                 <p>No instructions available</p>
               )}
