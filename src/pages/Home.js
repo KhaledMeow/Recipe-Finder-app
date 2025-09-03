@@ -74,6 +74,13 @@ const Home = () => {
     setSelectedMeal(meal);
   };
 
+  const handleKeyDown = (e, meal) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleMealClick(meal);
+    }
+  };
+
   const handleCloseModal = () => {
     setSelectedMeal(null);
   };
@@ -130,13 +137,24 @@ const Home = () => {
           ) : (
             <div className="meals-grid">
               {featuredMeals.map(meal => (
-                <MealCard
+                <div
                   key={meal.id}
-                  meal={meal}
-                  onFavoriteToggle={toggleFavorite}
-                  isFavorite={isFavorite(meal.id)}
+                  className="meal-item"
                   onClick={() => handleMealClick(meal)}
-                />
+                  onKeyDown={e => handleKeyDown(e, meal)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View details for ${meal.title}`}
+                >
+                  <MealCard
+                    meal={meal}
+                    onFavoriteToggle={e => {
+                      e.stopPropagation();
+                      toggleFavorite(meal);
+                    }}
+                    isFavorite={isFavorite(meal.id)}
+                  />
+                </div>
               ))}
             </div>
           )}
@@ -147,13 +165,24 @@ const Home = () => {
           <h2>Search Results for "{query}"</h2>
           <div className="meals-grid">
             {meals.map(meal => (
-              <MealCard
+              <div
                 key={meal.id}
-                meal={meal}
-                onFavoriteToggle={toggleFavorite}
-                isFavorite={isFavorite(meal.id)}
+                className="meal-item"
                 onClick={() => handleMealClick(meal)}
-              />
+                onKeyDown={e => handleKeyDown(e, meal)}
+                role="button"
+                tabIndex={0}
+                aria-label={`View details for ${meal.title}`}
+              >
+                <MealCard
+                  meal={meal}
+                  onFavoriteToggle={e => {
+                    e.stopPropagation();
+                    toggleFavorite(meal);
+                  }}
+                  isFavorite={isFavorite(meal.id)}
+                />
+              </div>
             ))}
           </div>
         </div>

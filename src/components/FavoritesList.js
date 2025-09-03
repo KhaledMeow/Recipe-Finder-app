@@ -4,13 +4,6 @@ import MealCard from './MealCard';
 import '../styles/FavoritesList.css';
 
 const FavoritesList = ({ favorites, onFavoriteToggle, onMealClick }) => {
-  const handleFavoriteToggle = (e, meal) => {
-    e.stopPropagation();
-    if (onFavoriteToggle) {
-      onFavoriteToggle(meal);
-    }
-  };
-
   if (favorites.length === 0) {
     return (
       <div className="no-favorites">
@@ -30,11 +23,14 @@ const FavoritesList = ({ favorites, onFavoriteToggle, onMealClick }) => {
           tabIndex={0}
           onKeyDown={e => e.key === 'Enter' && onMealClick && onMealClick(meal.id)}
         >
-          <MealCard
-            meal={meal}
-            onFavoriteToggle={e => handleFavoriteToggle(e, meal)}
-            isFavorite={true}
-          />
+          <MealCard meal={meal} onFavoriteToggle={() => onFavoriteToggle(meal)} isFavorite={true} />
+          <button
+            onClick={() => onFavoriteToggle(meal)}
+            className={`favorite-button favorited`}
+            aria-label="Remove from favorites"
+          >
+            ❤️
+          </button>
         </div>
       ))}
     </div>

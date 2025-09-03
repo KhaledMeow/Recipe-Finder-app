@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaSearch, FaGoogle } from 'react-icons/fa';
+import { FaSearch, FaUtensils, FaYoutube } from 'react-icons/fa';
 import '../styles/MealCard.css';
 
 const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
@@ -17,18 +17,43 @@ const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
     }
   };
 
+  const handleViewRecipe = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (meal.source) {
+      window.open(meal.source, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleWatchVideo = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (meal.youtube) {
+      window.open(meal.youtube, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div className="meal-card">
       <div className="meal-image-container">
-        <a
-          href={`https://www.google.com/search?q=${encodeURIComponent(meal.title + ' recipe')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="google-search-link"
-          title="Search on Google"
-        >
-          <FaGoogle className="google-icon" />
-        </a>
+        {meal.source && (
+          <button
+            onClick={handleViewRecipe}
+            className="action-button recipe-link"
+            title="View Full Recipe"
+          >
+            <FaUtensils className="action-icon" />
+          </button>
+        )}
+        {meal.youtube && (
+          <button
+            onClick={handleWatchVideo}
+            className="action-button youtube-link"
+            title="Watch Video"
+          >
+            <FaYoutube className="action-icon" />
+          </button>
+        )}
         <img
           src={meal.image || 'https://via.placeholder.com/300x200?text=No+Image'}
           alt={meal.title}

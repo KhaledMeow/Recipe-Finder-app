@@ -10,10 +10,9 @@
   position: relative;
 }
 
-.meal-card .google-search-link {
+.meal-card .action-button {
   position: absolute;
   top: 10px;
-  right: 10px;
   background: white;
   border-radius: 50%;
   width: 30px;
@@ -21,20 +20,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4285F4;
   z-index: 2;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  transition: transform 0.2s;
-  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+  padding: 0;
 }
 
-.meal-card .google-search-link:hover {
+.meal-card .action-button.recipe-link {
+  right: 10px;
+  color: #4CAF50;
+}
+
+.meal-card .action-button.recipe-link:hover {
+  background: #4CAF50;
+  color: white;
+}
+
+.meal-card .action-button.youtube-link {
+  right: 50px;
+  color: #FF0000;
+}
+
+.meal-card .action-button.youtube-link:hover {
+  background: #FF0000;
+  color: white;
+}
+
+.meal-card .action-button:hover {
   transform: scale(1.1);
-  color: #1a73e8;
 }
 
-.meal-card .google-icon {
+.meal-card .action-icon {
   font-size: 16px;
 }
 
