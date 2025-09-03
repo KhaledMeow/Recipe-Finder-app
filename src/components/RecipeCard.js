@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import '../styles/RecipeCard.css';
 
 const RecipeCard = ({ recipe, onFavoriteToggle, isFavorite = false }) => {
   const handleImageError = e => {
     e.target.onerror = null;
     e.target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Available';
+  };
+
+  const handleViewRecipe = e => {
+    e.preventDefault();
+    if (recipe.url) {
+      window.open(recipe.url, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const handleFavoriteClick = e => {
@@ -19,7 +25,7 @@ const RecipeCard = ({ recipe, onFavoriteToggle, isFavorite = false }) => {
 
   return (
     <div className="recipe-card">
-      <Link to={`/recipe/${recipe.id}`} className="recipe-image-link">
+      <div className="recipe-image-container">
         <img
           src={recipe.image || 'https://via.placeholder.com/300x200?text=No+Image'}
           alt={recipe.title}
@@ -27,28 +33,36 @@ const RecipeCard = ({ recipe, onFavoriteToggle, isFavorite = false }) => {
           onError={handleImageError}
           loading="lazy"
         />
-      </Link>
+      </div>
       <div className="recipe-info">
-        <h3 className="recipe-title">
-          <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link>
-        </h3>
+        <h3 className="recipe-title">{recipe.title}</h3>
         <div className="recipe-meta">
-          {recipe.readyInMinutes && (
-            <span className="meta-item">⏱️ {recipe.readyInMinutes} min</span>
+          {recipe.calories && (
+            <span className="meta-item">🔥 {Math.round(recipe.calories)} calories</span>
           )}
-          {recipe.servings && <span className="meta-item">🍽️ {recipe.servings} servings</span>}
+          {recipe.dietLabels?.length > 0 && (
+            <div className="diet-tags">
+              {recipe.dietLabels.map((label, index) => (
+                <span key={index} className="diet-tag">
+                  {label}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <div className="recipe-actions">
-          <Link to={`/recipe/${recipe.id}`} className="view-button">
+          <button onClick={handleViewRecipe} className="view-button" disabled={!recipe.url}>
             View Recipe
-          </Link>
-          <button
-            onClick={handleFavoriteClick}
-            className={`favorite-button ${isFavorite ? 'favorited' : ''}`}
-            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          >
-            {isFavorite ? '❤️' : '♡'}
           </button>
+          {onFavoriteToggle && (
+            <button
+              onClick={handleFavoriteClick}
+              className={`favorite-button ${isFavorite ? 'favorited' : ''}`}
+              aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            >
+              {isFavorite ? '❤️' : '♡'}
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -57,11 +71,12 @@ const RecipeCard = ({ recipe, onFavoriteToggle, isFavorite = false }) => {
 
 RecipeCard.propTypes = {
   recipe: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     title: PropTypes.string.isRequired,
     image: PropTypes.string,
-    readyInMinutes: PropTypes.number,
-    servings: PropTypes.number,
+    calories: PropTypes.number,
+    dietLabels: PropTypes.arrayOf(PropTypes.string),
+    url: PropTypes.string,
   }).isRequired,
   onFavoriteToggle: PropTypes.func,
   isFavorite: PropTypes.bool,

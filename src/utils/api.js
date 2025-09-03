@@ -1,40 +1,37 @@
-const API_KEY = process.env.REACT_APP_SPOONACULAR_API_KEY || 'YOUR_API_KEY';
-const BASE_URL = 'https://api.spoonacular.com/recipes';
+const APP_ID = import.meta.env.VITE_EDAMAM_APP_ID || '';
+const APP_KEY = import.meta.env.VITE_EDAMAM_APP_KEY || '';
+const BASE_URL = 'https://api.edamam.com/search';
 
 // Search for recipes by query and return cleaned data
 export const searchRecipes = async query => {
   try {
+    if (!APP_ID || !APP_KEY) {
+      throw new Error('Missing Edamam API credentials. Please check your .env file.');
+    }
+
     const response = await fetch(
-      `${BASE_URL}/complexSearch?apiKey=${API_KEY}&query=${encodeURIComponent(query)}&number=12&addRecipeInformation=true`
+      `${BASE_URL}?q=${encodeURIComponent(query)}&app_id=${APP_ID}&app_key=${APP_KEY}&to=12`
     );
+
     if (!response.ok) {
       throw new Error(`Failed to fetch recipes: ${response.status} ${response.statusText}`);
     }
+
     const data = await response.json();
-    // Clean and transform the recipe data
-    return (data.results || []).map(recipe => ({
-      id: recipe.id,
-      title: recipe.title,
-      image: recipe.image || 'https://via.placeholder.com/300x200?text=No+Image',
-      readyInMinutes: recipe.readyInMinutes || 0,
-      servings: recipe.servings || 0,
-      healthScore: recipe.healthScore || 0,
-      vegetarian: recipe.vegetarian || false,
-      vegan: recipe.vegan || false,
-      glutenFree: recipe.glutenFree || false,
-      dairyFree: recipe.dairyFree || false,
-      summary: recipe.summary || '',
-      instructions: recipe.analyzedInstructions?.[0]?.steps?.map(step => step.step) || [],
-      extendedIngredients: (recipe.extendedIngredients || []).map(ingredient => ({
-        id: ingredient.id,
-        name: ingredient.name,
-        amount: ingredient.amount,
-        unit: ingredient.unit,
-        original: ingredient.original,
-      })),
-      sourceUrl: recipe.sourceUrl || '',
-      sourceName: recipe.sourceName || 'Unknown',
-    }));
+
+    // Transform the Edamam API response to match our expected format
+    return (data.hits || []).map(hit => {
+      const recipe = hit.recipe;
+      return {
+        id: recipe.uri.split('#').pop(), // Extract ID from URI
+        title: recipe.label,
+        image: recipe.image || 'https://via.placeholder.com/300x200?text=No+Image',
+        calories: Math.round(recipe.calories),
+        ingredients: recipe.ingredientLines || [],
+        dietLabels: recipe.dietLabels || [],
+        url: recipe.url,
+      };
+    });
   } catch (error) {
     console.error('Error searching recipes:', error);
     throw error;
@@ -45,7 +42,7 @@ export const searchRecipes = async query => {
 export const getRecipeDetails = async id => {
   try {
     const response = await fetch(
-      `${BASE_URL}/${id}/information?apiKey=${API_KEY}&includeNutrition=false`
+      `${BASE_URL}/${id}/information?apiKey=${APP_KEY}&includeNutrition=false`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch recipe details');
@@ -60,7 +57,7 @@ export const getRecipeDetails = async id => {
 // Get similar recipes
 export const getSimilarRecipes = async id => {
   try {
-    const response = await fetch(`${BASE_URL}/${id}/similar?apiKey=${API_KEY}&number=4`);
+    const response = await fetch(`${BASE_URL}/${id}/similar?apiKey=${APP_KEY}&number=4`);
     if (!response.ok) {
       throw new Error('Failed to fetch similar recipes');
     }
@@ -74,7 +71,7 @@ export const getSimilarRecipes = async id => {
 // Get random recipes (for the home page)
 export const getRandomRecipes = async (count = 6) => {
   try {
-    const response = await fetch(`${BASE_URL}/random?apiKey=${API_KEY}&number=${count}`);
+    const response = await fetch(`${BASE_URL}/random?apiKey=${APP_KEY}&number=${count}`);
     if (!response.ok) {
       throw new Error('Failed to fetch random recipes');
     }
