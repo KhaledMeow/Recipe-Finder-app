@@ -1,38 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RecipeCard from './RecipeCard';
+import MealCard from './MealCard';
 import '../styles/FavoritesList.css';
 
-const FavoritesList = ({ favorites, onFavoriteToggle, onRecipeClick }) => {
-  const handleFavoriteToggle = (e, recipe) => {
+const FavoritesList = ({ favorites, onFavoriteToggle, onMealClick }) => {
+  const handleFavoriteToggle = (e, meal) => {
     e.stopPropagation();
     if (onFavoriteToggle) {
-      onFavoriteToggle(recipe);
+      onFavoriteToggle(meal);
     }
   };
 
   if (favorites.length === 0) {
     return (
       <div className="no-favorites">
-        <p>No favorite recipes yet. Start adding some!</p>
+        <p>No favorite meals yet. Start adding some!</p>
       </div>
     );
   }
 
   return (
     <div className="favorites-grid">
-      {favorites.map(recipe => (
+      {favorites.map(meal => (
         <div
-          key={recipe.id}
-          className="favorite-recipe-item"
-          onClick={() => onRecipeClick && onRecipeClick(recipe.id)}
+          key={meal.id}
+          className="favorite-meal-item"
+          onClick={() => onMealClick && onMealClick(meal.id)}
           role="button"
           tabIndex={0}
-          onKeyDown={e => e.key === 'Enter' && onRecipeClick && onRecipeClick(recipe.id)}
+          onKeyDown={e => e.key === 'Enter' && onMealClick && onMealClick(meal.id)}
         >
-          <RecipeCard
-            recipe={recipe}
-            onFavoriteToggle={e => handleFavoriteToggle(e, recipe)}
+          <MealCard
+            meal={meal}
+            onFavoriteToggle={e => handleFavoriteToggle(e, meal)}
             isFavorite={true}
           />
         </div>
@@ -52,11 +52,11 @@ FavoritesList.propTypes = {
     })
   ).isRequired,
   onFavoriteToggle: PropTypes.func.isRequired,
-  onRecipeClick: PropTypes.func,
+  onMealClick: PropTypes.func,
 };
 
 FavoritesList.defaultProps = {
-  onRecipeClick: null,
+  onMealClick: null,
 };
 
 export default FavoritesList;

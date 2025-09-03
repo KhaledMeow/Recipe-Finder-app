@@ -1,8 +1,8 @@
 import React from 'react';
-import '../styles/RecipeModal.css';
+import '../styles/MealModal.css';
 
-const RecipeModal = ({ recipe, onClose }) => {
-  if (!recipe) return null;
+const MealModal = ({ meal, onClose }) => {
+  if (!meal) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -10,26 +10,26 @@ const RecipeModal = ({ recipe, onClose }) => {
         <button className="close-button" onClick={onClose}>
           ×
         </button>
-        <h2>{recipe.title}</h2>
+        <h2>{meal.title}</h2>
         <div className="modal-body">
           <div className="modal-image-container">
             <img
-              src={recipe.image || 'https://via.placeholder.com/500x300?text=No+Image'}
-              alt={recipe.title}
+              src={meal.image || 'https://via.placeholder.com/500x300?text=No+Image'}
+              alt={meal.title}
               className="modal-image"
             />
           </div>
-          <div className="recipe-details">
+          <div className="meal-details">
             <h3>Ingredients</h3>
             <ul className="ingredients-list">
-              {recipe.extendedIngredients?.map((ingredient, index) => (
+              {meal.extendedIngredients?.map((ingredient, index) => (
                 <li key={index}>{ingredient.original}</li>
               )) || <li>No ingredients information available</li>}
             </ul>
             <h3>Instructions</h3>
             <div className="instructions">
-              {recipe.instructions ? (
-                <div dangerouslySetInnerHTML={{ __html: recipe.instructions }} />
+              {meal.instructions ? (
+                <div dangerouslySetInnerHTML={{ __html: meal.instructions }} />
               ) : (
                 <p>No instructions available</p>
               )}
@@ -41,4 +41,4 @@ const RecipeModal = ({ recipe, onClose }) => {
   );
 };
 
-export default RecipeModal;
+export default MealModal;

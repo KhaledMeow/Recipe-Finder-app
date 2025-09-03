@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-logo">
-        Recipe Finder
+        Meal Finder
       </Link>
       <div className="navbar-links">
         <Link to="/" className="nav-link">

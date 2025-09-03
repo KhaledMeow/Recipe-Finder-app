@@ -1,4 +1,4 @@
-.recipe-details-page {
+.meal-details-page {
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
@@ -26,7 +26,7 @@
   margin-right: 0.5rem;
 }
 
-.recipe-header {
+.meal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,7 +35,7 @@
   gap: 1rem;
 }
 
-.recipe-header h1 {
+.meal-header h1 {
   margin: 0;
   flex: 1;
   min-width: 200px;
@@ -70,14 +70,14 @@
   background-color: #45a049;
 }
 
-.recipe-content {
+.meal-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-top: 2rem;
 }
 
-.recipe-image-container {
+.meal-image-container {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
@@ -85,24 +85,24 @@
   height: fit-content;
 }
 
-.recipe-detail-image {
+.meal-detail-image {
   width: 100%;
   height: auto;
   display: block;
   transition: transform 0.3s ease;
 }
 
-.recipe-detail-image:hover {
+.meal-detail-image:hover {
   transform: scale(1.02);
 }
 
-.recipe-info {
+.meal-info {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.recipe-meta {
+.meal-meta {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
@@ -200,28 +200,28 @@
 
 /* Responsive Design */
 @media (max-width: 900px) {
-  .recipe-content {
+  .meal-content {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
   
-  .recipe-image-container {
+  .meal-image-container {
     max-width: 600px;
     margin: 0 auto;
   }
 }
 
 @media (max-width: 768px) {
-  .recipe-details-page {
+  .meal-details-page {
     padding: 1.5rem;
   }
   
-  .recipe-header {
+  .meal-header {
     flex-direction: column;
     align-items: flex-start;
   }
   
-  .recipe-header h1 {
+  .meal-header h1 {
     font-size: 1.8rem;
     margin-bottom: 1rem;
   }
@@ -237,15 +237,15 @@
 }
 
 @media (max-width: 480px) {
-  .recipe-details-page {
+  .meal-details-page {
     padding: 1rem;
   }
   
-  .recipe-header h1 {
+  .meal-header h1 {
     font-size: 1.6rem;
   }
   
-  .recipe-meta {
+  .meal-meta {
     flex-direction: column;
     gap: 0.75rem;
   }

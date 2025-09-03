@@ -74,7 +74,7 @@
   transform: translateY(0);
 }
 
-.featured-recipes {
+.featured-meals {
   margin-top: 3rem;
 }
 
@@ -103,7 +103,7 @@
   text-decoration: underline;
 }
 
-.recipes-grid {
+.meals-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
@@ -159,7 +159,7 @@
     padding: 0.8rem;
   }
   
-  .recipes-grid {
+  .meals-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 1.5rem;
   }
@@ -175,7 +175,7 @@
     margin-bottom: 2rem;
   }
   
-  .recipes-grid {
+  .meals-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }

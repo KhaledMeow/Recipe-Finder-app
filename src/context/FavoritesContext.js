@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const FavoritesContext = createContext();
 
-const FAVORITES_STORAGE_KEY = 'recipe-finder-favorites';
+const FAVORITES_STORAGE_KEY = 'meal-finder-favorites';
 
 export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
@@ -29,15 +29,15 @@ export const FavoritesProvider = ({ children }) => {
     }
   }, [favorites]);
 
-  const isFavorite = recipeId => {
-    return favorites.some(fav => fav.id === recipeId);
+  const isFavorite = mealId => {
+    return favorites.some(fav => fav.id === mealId);
   };
 
-  const toggleFavorite = recipe => {
+  const toggleFavorite = meal => {
     setFavorites(prevFavorites =>
-      isFavorite(recipe.id)
-        ? prevFavorites.filter(fav => fav.id !== recipe.id)
-        : [...prevFavorites, recipe]
+      isFavorite(meal.id)
+        ? prevFavorites.filter(fav => fav.id !== meal.id)
+        : [...prevFavorites, meal]
     );
   };
 

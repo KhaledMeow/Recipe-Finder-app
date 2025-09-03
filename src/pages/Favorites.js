@@ -8,8 +8,8 @@ const Favorites = () => {
   const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavorites();
 
-  const handleRecipeClick = recipeId => {
-    navigate(`/recipe/${recipeId}`);
+  const handleMealClick = mealId => {
+    navigate(`/meal/${mealId}`);
   };
 
   const handleBackClick = () => {
@@ -22,10 +22,10 @@ const Favorites = () => {
         <button className="back-button" onClick={handleBackClick}>
           &larr; Back
         </button>
-        <h1>Your Favorite Recipes</h1>
+        <h1>Your Favorite Meals</h1>
         {favorites.length > 0 && (
           <p className="favorites-count">
-            {favorites.length} {favorites.length === 1 ? 'recipe' : 'recipes'} saved
+            {favorites.length} {favorites.length === 1 ? 'meal' : 'meals'} saved
           </p>
         )}
       </div>
@@ -33,7 +33,7 @@ const Favorites = () => {
         <FavoritesList
           favorites={favorites}
           onFavoriteToggle={toggleFavorite}
-          onRecipeClick={handleRecipeClick}
+          onMealClick={handleMealClick}
         />
       </div>
     </div>

@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { searchRecipes, getRandomRecipes } from '../utils/api';
+import { searchMeals, getRandomMeals } from '../utils/api';
 import SearchBar from '../components/SearchBar';
-import RecipeCard from '../components/RecipeCard';
-import RecipeModal from '../components/RecipeModal';
+import MealCard from '../components/MealCard';
+import MealModal from '../components/MealModal';
 import { useFavorites } from '../context/FavoritesContext';
 import '../styles/Home.css';
 
 const Home = () => {
   const [query, setQuery] = useState('');
-  const [recipes, setRecipes] = useState([]);
-  const [featuredRecipes, setFeaturedRecipes] = useState([]);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [meals, setMeals] = useState([]);
+  const [featuredMeals, setFeaturedMeals] = useState([]);
+  const [selectedMeal, setSelectedMeal] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFeaturedLoading, setIsFeaturedLoading] = useState(true);
   const [error, setError] = useState(null);
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  // Load and refresh featured recipes on component mount or refresh
+  // Load and refresh featured meals on component mount or refresh
   useEffect(() => {
-    const loadFeaturedRecipes = async () => {
+    const loadFeaturedMeals = async () => {
       try {
         setIsFeaturedLoading(true);
-        const recipes = await getRandomRecipes(6);
-        setFeaturedRecipes(recipes);
+        const meals = await getRandomMeals(6);
+        setFeaturedMeals(meals);
       } catch (err) {
-        console.error('Error loading featured recipes:', err);
+        console.error('Error loading featured meals:', err);
       } finally {
         setIsFeaturedLoading(false);
       }
     };
 
-    // Load recipes immediately when component mounts
-    loadFeaturedRecipes();
+    // Load meals immediately when component mounts
+    loadFeaturedMeals();
 
     // Set up refresh interval (every 5 minutes)
-    const refreshInterval = setInterval(loadFeaturedRecipes, 5 * 60 * 1000);
+    const refreshInterval = setInterval(loadFeaturedMeals, 5 * 60 * 1000);
 
     // Clean up interval on component unmount
     return () => clearInterval(refreshInterval);
@@ -45,10 +45,10 @@ const Home = () => {
   const handleRefreshFeatured = async () => {
     try {
       setIsFeaturedLoading(true);
-      const recipes = await getRandomRecipes(6);
-      setFeaturedRecipes(recipes);
+      const meals = await getRandomMeals(6);
+      setFeaturedMeals(meals);
     } catch (err) {
-      console.error('Error refreshing featured recipes:', err);
+      console.error('Error refreshing featured meals:', err);
     } finally {
       setIsFeaturedLoading(false);
     }
@@ -60,36 +60,36 @@ const Home = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const results = await searchRecipes(searchQuery);
-      setRecipes(results);
+      const results = await searchMeals(searchQuery);
+      setMeals(results);
     } catch (err) {
-      setError('Failed to fetch recipes. Please try again later.');
+      setError('Failed to fetch meals. Please try again later.');
       console.error('Search error:', err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleRecipeClick = recipe => {
-    setSelectedRecipe(recipe);
+  const handleMealClick = meal => {
+    setSelectedMeal(meal);
   };
 
   const handleCloseModal = () => {
-    setSelectedRecipe(null);
+    setSelectedMeal(null);
   };
 
   const showFeaturedHeader = !query && !isLoading && !error;
-  const showNoResults = !isLoading && !error && query && recipes.length === 0;
+  const showNoResults = !isLoading && !error && query && meals.length === 0;
 
   return (
     <div className="home">
-      <h1>Find Your Perfect Recipe</h1>
+      <h1>Find Your Perfect Meal Ideas</h1>
       <div className="search-container">
         <SearchBar onSearch={handleSearch} />
       </div>
       {isLoading && (
         <div className="loading-state">
-          <p>Searching for recipes...</p>
+          <p>Searching for meals...</p>
         </div>
       )}
       {error && (
@@ -99,25 +99,25 @@ const Home = () => {
       )}
       {showNoResults && (
         <div className="no-results">
-          <h3>No recipes found for "{query}"</h3>
+          <h3>No meals found for "{query}"</h3>
           <p>Try a different search term or check your spelling.</p>
         </div>
       )}
       {showFeaturedHeader && (
-        <div className="featured-recipes">
+        <div className="featured-meals">
           <div className="featured-header">
             <div className="featured-title-container">
-              <h2>Featured Recipes</h2>
+              <h2>Featured Meal Ideas</h2>
               <button
                 onClick={handleRefreshFeatured}
                 className="refresh-button"
                 disabled={isFeaturedLoading}
-                title="Refresh featured recipes"
+                title="Refresh featured meals"
               >
                 {isFeaturedLoading ? 'Loading...' : '🔄'}
               </button>
             </div>
-            {!isFeaturedLoading && featuredRecipes.length > 0 && (
+            {!isFeaturedLoading && featuredMeals.length > 0 && (
               <Link to="/favorites" className="view-all">
                 View Favorites
               </Link>
@@ -125,45 +125,45 @@ const Home = () => {
           </div>
           {isFeaturedLoading ? (
             <div className="loading-state">
-              <p>Loading featured recipes...</p>
+              <p>Loading featured meals...</p>
             </div>
           ) : (
-            <div className="recipes-grid">
-              {featuredRecipes.map(recipe => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
+            <div className="meals-grid">
+              {featuredMeals.map(meal => (
+                <MealCard
+                  key={meal.id}
+                  meal={meal}
                   onFavoriteToggle={toggleFavorite}
-                  isFavorite={isFavorite(recipe.id)}
-                  onClick={() => handleRecipeClick(recipe)}
+                  isFavorite={isFavorite(meal.id)}
+                  onClick={() => handleMealClick(meal)}
                 />
               ))}
             </div>
           )}
         </div>
       )}
-      {query && recipes.length > 0 && (
+      {query && meals.length > 0 && (
         <div className="search-results">
           <h2>Search Results for "{query}"</h2>
-          <div className="recipes-grid">
-            {recipes.map(recipe => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
+          <div className="meals-grid">
+            {meals.map(meal => (
+              <MealCard
+                key={meal.id}
+                meal={meal}
                 onFavoriteToggle={toggleFavorite}
-                isFavorite={isFavorite(recipe.id)}
-                onClick={() => handleRecipeClick(recipe)}
+                isFavorite={isFavorite(meal.id)}
+                onClick={() => handleMealClick(meal)}
               />
             ))}
           </div>
         </div>
       )}
-      {selectedRecipe && (
-        <RecipeModal
-          recipe={selectedRecipe}
+      {selectedMeal && (
+        <MealModal
+          meal={selectedMeal}
           onClose={handleCloseModal}
-          onFavoriteToggle={() => toggleFavorite(selectedRecipe)}
-          isFavorite={isFavorite(selectedRecipe.id)}
+          onFavoriteToggle={() => toggleFavorite(selectedMeal)}
+          isFavorite={isFavorite(selectedMeal.id)}
         />
       )}
     </div>
