@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FaSearch, FaGoogle } from 'react-icons/fa';
 import '../styles/MealCard.css';
 
 const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
@@ -19,6 +20,15 @@ const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
   return (
     <div className="meal-card">
       <div className="meal-image-container">
+        <a
+          href={`https://www.google.com/search?q=${encodeURIComponent(meal.title + ' recipe')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="google-search-link"
+          title="Search on Google"
+        >
+          <FaGoogle className="google-icon" />
+        </a>
         <img
           src={meal.image || 'https://via.placeholder.com/300x200?text=No+Image'}
           alt={meal.title}
@@ -44,15 +54,27 @@ const MealCard = ({ meal, onFavoriteToggle, isFavorite = false }) => {
           )}
         </div>
         <div className="meal-actions">
-          {onFavoriteToggle && (
-            <button
-              onClick={handleFavoriteClick}
-              className={`favorite-button ${isFavorite ? 'favorited' : ''}`}
-              aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          <div className="meal-actions-buttons">
+            <a
+              href={`https://www.google.com/search?q=${encodeURIComponent(`${meal.title} recipe`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="search-recipe-button"
+              title="Search for recipe"
             >
-              {isFavorite ? '❤️' : '♡'}
-            </button>
-          )}
+              <FaSearch className="search-icon" />
+              <span>Find Recipe</span>
+            </a>
+            {onFavoriteToggle && (
+              <button
+                onClick={handleFavoriteClick}
+                className={`favorite-button ${isFavorite ? 'favorited' : ''}`}
+                aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                {isFavorite ? '❤️' : '♡'}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
