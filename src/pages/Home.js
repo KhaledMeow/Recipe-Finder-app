@@ -17,10 +17,11 @@ const Home = () => {
   const [error, setError] = useState(null);
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  // Load featured recipes on component mount
+  // Load and refresh featured recipes on component mount or refresh
   useEffect(() => {
     const loadFeaturedRecipes = async () => {
       try {
+        setIsFeaturedLoading(true);
         const recipes = await getRandomRecipes(6);
         setFeaturedRecipes(recipes);
       } catch (err) {
@@ -30,8 +31,28 @@ const Home = () => {
       }
     };
 
+    // Load recipes immediately when component mounts
     loadFeaturedRecipes();
+
+    // Set up refresh interval (every 5 minutes)
+    const refreshInterval = setInterval(loadFeaturedRecipes, 5 * 60 * 1000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(refreshInterval);
   }, []);
+
+  // Add a refresh button handler
+  const handleRefreshFeatured = async () => {
+    try {
+      setIsFeaturedLoading(true);
+      const recipes = await getRandomRecipes(6);
+      setFeaturedRecipes(recipes);
+    } catch (err) {
+      console.error('Error refreshing featured recipes:', err);
+    } finally {
+      setIsFeaturedLoading(false);
+    }
+  };
 
   const handleSearch = async searchQuery => {
     if (!searchQuery.trim()) return;
@@ -85,7 +106,17 @@ const Home = () => {
       {showFeaturedHeader && (
         <div className="featured-recipes">
           <div className="featured-header">
-            <h2>Featured Recipes</h2>
+            <div className="featured-title-container">
+              <h2>Featured Recipes</h2>
+              <button 
+                onClick={handleRefreshFeatured} 
+                className="refresh-button"
+                disabled={isFeaturedLoading}
+                title="Refresh featured recipes"
+              >
+                {isFeaturedLoading ? 'Loading...' : '🔄'}
+              </button>
+            </div>
             {!isFeaturedLoading && featuredRecipes.length > 0 && (
               <Link to="/favorites" className="view-all">
                 View Favorites
