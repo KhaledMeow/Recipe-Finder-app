@@ -5,9 +5,9 @@ import '../styles/RecipeCard.css';
 const RecipeCard = ({ recipe, onFavoriteToggle, isFavorite }) => {
   return (
     <div className="recipe-card">
-      <img 
-        src={recipe.image || 'https://via.placeholder.com/300x200?text=No+Image'} 
-        alt={recipe.title} 
+      <img
+        src={recipe.image || 'https://via.placeholder.com/300x200?text=No+Image'}
+        alt={recipe.title}
         className="recipe-image"
       />
       <div className="recipe-info">
@@ -16,8 +16,8 @@ const RecipeCard = ({ recipe, onFavoriteToggle, isFavorite }) => {
           <Link to={`/recipe/${recipe.id}`} className="view-button">
             View Recipe
           </Link>
-          <button 
-            onClick={() => onFavoriteToggle(recipe)} 
+          <button
+            onClick={() => onFavoriteToggle(recipe)}
             className={`favorite-button ${isFavorite ? 'favorited' : ''}`}
           >
             {isFavorite ? '★' : '☆'}

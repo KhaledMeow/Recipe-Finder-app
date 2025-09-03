@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (query.trim()) {
       onSearch(query);
@@ -15,7 +15,7 @@ const SearchBar = ({ onSearch }) => {
       <input
         type="text"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={e => setQuery(e.target.value)}
         placeholder="Search for recipes..."
         className="search-input"
       />

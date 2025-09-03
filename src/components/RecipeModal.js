@@ -6,14 +6,16 @@ const RecipeModal = ({ recipe, onClose }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-button" onClick={onClose}>×</button>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <button className="close-button" onClick={onClose}>
+          ×
+        </button>
         <h2>{recipe.title}</h2>
         <div className="modal-body">
           <div className="modal-image-container">
-            <img 
-              src={recipe.image || 'https://via.placeholder.com/500x300?text=No+Image'} 
-              alt={recipe.title} 
+            <img
+              src={recipe.image || 'https://via.placeholder.com/500x300?text=No+Image'}
+              alt={recipe.title}
               className="modal-image"
             />
           </div>

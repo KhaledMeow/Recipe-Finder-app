@@ -106,7 +106,7 @@ const RecipeDetails = () => {
 
   return (
     <div className="recipe-details-page">
-      <button 
+      <button
         className="back-button"
         onClick={() => window.history.back()}
         aria-label="Go back to previous page"
@@ -115,7 +115,7 @@ const RecipeDetails = () => {
       </button>
       <div className="recipe-header">
         <h1>{recipe.title}</h1>
-        <button 
+        <button
           className={`favorite-button ${isFavorite(recipe.id) ? 'favorited' : ''}`}
           onClick={() => toggleFavorite(recipe)}
           aria-label={isFavorite(recipe.id) ? 'Remove from favorites' : 'Add to favorites'}
@@ -125,9 +125,9 @@ const RecipeDetails = () => {
       </div>
       <div className="recipe-content">
         <div className="recipe-image-container">
-          <img 
-            src={recipe.image || 'https://via.placeholder.com/600x400?text=No+Image'} 
-            alt={recipe.title} 
+          <img
+            src={recipe.image || 'https://via.placeholder.com/600x400?text=No+Image'}
+            alt={recipe.title}
             className="recipe-detail-image"
             onError={e => {
               e.target.onerror = null;
@@ -162,9 +162,9 @@ const RecipeDetails = () => {
           </div>
           {recipe.sourceUrl && (
             <div className="source-link">
-              <a 
-                href={recipe.sourceUrl} 
-                target="_blank" 
+              <a
+                href={recipe.sourceUrl}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="external-link"
               >

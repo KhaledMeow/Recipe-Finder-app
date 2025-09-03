@@ -29,20 +29,16 @@ export const FavoritesProvider = ({ children }) => {
     }
   }, [favorites]);
 
-  const toggleFavorite = (recipe) => {
-    setFavorites(prevFavorites => {
-      const isAlreadyFavorite = prevFavorites.some(fav => fav.id === recipe.id);
-      
-      if (isAlreadyFavorite) {
-        return prevFavorites.filter(fav => fav.id !== recipe.id);
-      } else {
-        return [...prevFavorites, recipe];
-      }
-    });
+  const isFavorite = recipeId => {
+    return favorites.some(fav => fav.id === recipeId);
   };
 
-  const isFavorite = (recipeId) => {
-    return favorites.some(fav => fav.id === recipeId);
+  const toggleFavorite = recipe => {
+    setFavorites(prevFavorites =>
+      isFavorite(recipe.id)
+        ? prevFavorites.filter(fav => fav.id !== recipe.id)
+        : [...prevFavorites, recipe]
+    );
   };
 
   return (

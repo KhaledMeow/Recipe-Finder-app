@@ -9,7 +9,6 @@ const Favorites = () => {
   return (
     <div className="favorites-page">
       <h1>Your Favorite Recipes</h1>
-      
       {favorites.length === 0 ? (
         <div className="empty-favorites">
           <p>You haven't added any recipes to your favorites yet.</p>
@@ -20,10 +19,7 @@ const Favorites = () => {
           <p className="favorites-count">
             {favorites.length} {favorites.length === 1 ? 'recipe' : 'recipes'} saved
           </p>
-          <FavoritesList 
-            favorites={favorites}
-            onFavoriteToggle={toggleFavorite}
-          />
+          <FavoritesList favorites={favorites} onFavoriteToggle={toggleFavorite} />
         </>
       )}
     </div>
