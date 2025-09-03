@@ -12,16 +12,9 @@ const Favorites = () => {
     navigate(`/meal/${mealId}`);
   };
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
-
   return (
     <div className="favorites-page">
       <div className="favorites-header">
-        <button className="back-button" onClick={handleBackClick}>
-          &larr; Back
-        </button>
         <h1>Your Favorite Meals</h1>
         {favorites.length > 0 && (
           <p className="favorites-count">
