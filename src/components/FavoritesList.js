@@ -13,7 +13,7 @@ const FavoritesList = ({ favorites, onFavoriteToggle }) => {
 
   return (
     <div className="favorites-grid">
-      {favorites.map((recipe) => (
+      {favorites.map(recipe => (
         <RecipeCard
           key={recipe.id}
           recipe={recipe}
