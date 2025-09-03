@@ -1,51 +1,90 @@
 .favorites-page {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
+  min-height: calc(100vh - 64px);
 }
 
-.favorites-page h1 {
-  color: #2c3e50;
-  margin-bottom: 2rem;
+.favorites-header {
   text-align: center;
-  font-size: 2.2rem;
+  margin-bottom: 2rem;
   position: relative;
+  padding: 0 1rem;
+}
+
+.favorites-header h1 {
+  color: #2c3e50;
+  font-size: 2.2rem;
+  margin: 1rem 0;
+  position: relative;
+  display: inline-block;
   padding-bottom: 0.5rem;
 }
 
-.favorites-page h1:after {
+.favorites-header h1::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
+  width: 80px;
+  height: 3px;
   background-color: #4CAF50;
   border-radius: 2px;
 }
 
 .favorites-count {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-}
-
-.empty-favorites {
-  text-align: center;
-  padding: 4rem 2rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin: 2rem 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.empty-favorites p {
   color: #666;
   font-size: 1.1rem;
-  line-height: 1.6;
-  margin: 0.5rem 0;
+  margin: 0.5rem 0 1.5rem;
+  font-weight: 500;
+}
+
+.favorites-container {
+  padding: 0 1rem;
+}
+
+.back-button {
+  position: absolute;
+  left: 1rem;
+  top: 0.5rem;
+  background: none;
+  border: none;
+  color: #4CAF50;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: rgba(76, 175, 80, 0.1);
+  transform: translateX(-4px);
+}
+
+.back-button:focus {
+  outline: 2px solid rgba(76, 175, 80, 0.5);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .favorites-page {
+    padding: 1rem 0.5rem;
+  }
+  
+  .favorites-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .back-button {
+    position: relative;
+    left: 0;
+    margin-bottom: 1rem;
+  }
 }
 
 .empty-favorites p:first-child {

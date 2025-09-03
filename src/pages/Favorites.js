@@ -1,27 +1,41 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFavorites } from '../context/FavoritesContext';
 import FavoritesList from '../components/FavoritesList';
 import '../styles/Favorites.css';
 
 const Favorites = () => {
+  const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavorites();
+
+  const handleRecipeClick = recipeId => {
+    navigate(`/recipe/${recipeId}`);
+  };
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="favorites-page">
-      <h1>Your Favorite Recipes</h1>
-      {favorites.length === 0 ? (
-        <div className="empty-favorites">
-          <p>You haven't added any recipes to your favorites yet.</p>
-          <p>Search for recipes and click the star icon to add them here!</p>
-        </div>
-      ) : (
-        <>
+      <div className="favorites-header">
+        <button className="back-button" onClick={handleBackClick}>
+          &larr; Back
+        </button>
+        <h1>Your Favorite Recipes</h1>
+        {favorites.length > 0 && (
           <p className="favorites-count">
             {favorites.length} {favorites.length === 1 ? 'recipe' : 'recipes'} saved
           </p>
-          <FavoritesList favorites={favorites} onFavoriteToggle={toggleFavorite} />
-        </>
-      )}
+        )}
+      </div>
+      <div className="favorites-container">
+        <FavoritesList
+          favorites={favorites}
+          onFavoriteToggle={toggleFavorite}
+          onRecipeClick={handleRecipeClick}
+        />
+      </div>
     </div>
   );
 };
