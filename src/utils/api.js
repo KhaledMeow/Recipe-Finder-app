@@ -82,20 +82,36 @@ export const getSimilarRecipes = async category => {
 // Get random recipes (for the home page)
 export const getRandomRecipes = async (count = 6) => {
   try {
-    // TheMealDB only returns one random meal at a time, so we need to make multiple requests
-    const requests = Array(count)
-      .fill()
-      .map(() => fetch(`${BASE_URL}/random.php`));
-    const responses = await Promise.all(requests);
-    const data = await Promise.all(
-      responses.map(res => {
-        if (!res.ok) throw new Error('Failed to fetch random recipes');
-        return res.json();
-      })
+    // Create an array of fetch promises for random recipes
+    const requests = Array.from({ length: count }, () =>
+      fetch(`${BASE_URL}/random.php`)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch random recipes');
+          return res.json();
+        })
+        .then(data => data.meals?.[0])
+        .catch(error => {
+          console.error('Error in individual recipe fetch:', error);
+          return null;
+        })
     );
 
-    // Extract meals from responses and flatten the array
-    return data.map(item => item.meals[0]).filter(Boolean);
+    // Wait for all requests to complete and filter out any failed ones
+    const recipes = (await Promise.all(requests)).filter(Boolean);
+
+    // Transform the recipes to match our expected format
+    return recipes.map(meal => ({
+      id: meal.idMeal,
+      title: meal.strMeal,
+      image: meal.strMealThumb || 'https://via.placeholder.com/300x200?text=No+Image',
+      category: meal.strCategory,
+      area: meal.strArea,
+      instructions: meal.strInstructions ? meal.strInstructions.split('\n').filter(Boolean) : [],
+      ingredients: getIngredientsList(meal),
+      tags: meal.strTags ? meal.strTags.split(',') : [],
+      youtube: meal.strYoutube,
+      source: meal.strSource,
+    }));
   } catch (error) {
     console.error('Error fetching random recipes:', error);
     return [];

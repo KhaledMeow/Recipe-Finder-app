@@ -108,8 +108,8 @@ const Home = () => {
           <div className="featured-header">
             <div className="featured-title-container">
               <h2>Featured Recipes</h2>
-              <button 
-                onClick={handleRefreshFeatured} 
+              <button
+                onClick={handleRefreshFeatured}
                 className="refresh-button"
                 disabled={isFeaturedLoading}
                 title="Refresh featured recipes"
